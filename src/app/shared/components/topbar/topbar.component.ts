@@ -1,0 +1,1 @@
+import {Component} from '@angular/core';import {AuthService} from '../../../core/services/auth.service';@Component({selector:'app-topbar',template:'<header class="topbar">Welcome, {{auth.currentUser?.name}}</header>'})export class TopbarComponent{constructor(public auth:AuthService){}}

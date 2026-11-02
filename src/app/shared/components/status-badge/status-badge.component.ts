@@ -1,0 +1,1 @@
+import {Component,Input} from '@angular/core';@Component({selector:'app-status-badge',template:'<span class="badge" [ngClass]="status.toLowerCase()">{{status}}</span>'})export class StatusBadgeComponent{@Input()status='PENDING';}

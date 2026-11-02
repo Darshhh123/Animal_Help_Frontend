@@ -1,1 +1,0 @@
-# Animal_Help_Frontend

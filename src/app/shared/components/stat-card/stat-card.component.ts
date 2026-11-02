@@ -1,0 +1,1 @@
+import {Component,Input} from '@angular/core';@Component({selector:'app-stat-card',template:'<div class="stat"><small>{{label}}</small><h2>{{value}}</h2><small>{{hint}}</small></div>'})export class StatCardComponent{@Input()label='';@Input()value='0';@Input()hint='';}

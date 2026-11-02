@@ -1,0 +1,1 @@
+<h1>AI care assistant</h1><section class="card chat"><p *ngFor="let m of messages">{{m}}</p><form (ngSubmit)="send()"><input [(ngModel)]="chat" name="chat" placeholder="Ask a question..." required><button class="primary">Send</button></form><small>Scripted demo responses only. Not a diagnosis or connected LLM.</small></section>

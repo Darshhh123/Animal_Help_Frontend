@@ -1,0 +1,12 @@
+import {Component} from '@angular/core';import {Router} from '@angular/router';
+import {AuthService} from '../../../core/services/auth.service';import {AppointmentService} from '../../../core/services/appointment.service';import {PetService} from '../../../core/services/pet.service';import {NotificationService} from '../../../core/services/notification.service';
+@Component({selector:'app-admin-dashboard',templateUrl:'./admin-dashboard.component.html'})export class AdminDashboardComponent{
+ today=new Date().toISOString().slice(0,10);petId='pet-1';reason='';date=this.today;time='10:00';petName='';species='Dog';breed='';age=1;chat='';messages:string[]=['Hello! Ask a general pet-care question or type “book appointment”.'];
+ constructor(public auth:AuthService,public appointments:AppointmentService,public pets:PetService,public notify:NotificationService,private router:Router){}
+ login(role:'OWNER'|'ADMIN'){this.auth.login(role);this.router.navigate([role==='ADMIN'?'/admin/dashboard':'/owner/dashboard']);}
+ book(source:'FORM'|'AI'='FORM'){const p=this.pets.pets.find(x=>x.id===this.petId);if(!p||!this.reason.trim()||!this.date||!this.time){this.notify.show('Please complete all booking details.');return;}this.appointments.create({petId:p.id,petName:p.name,reason:this.reason,date:this.date,time:this.time,bookingSource:source});this.notify.show('Appointment request submitted.');this.router.navigate(['/owner/appointments']);}
+ approve(id:string){this.appointments.updateStatus(id,'CONFIRMED');this.notify.show('Appointment confirmed.');}reject(id:string){this.appointments.updateStatus(id,'REJECTED');this.notify.show('Appointment rejected.');}
+ addPet(){if(!this.petName.trim())return;this.pets.add({name:this.petName,species:this.species,breed:this.breed||'Not specified',age:this.age});this.petName='';this.notify.show('Pet profile added.');}removePet(id:string){this.pets.remove(id);}
+ send(){const q=this.chat.trim();if(!q)return;this.messages.push('You: '+q);const l=q.toLowerCase();this.messages.push('Assistant: '+(l.includes('emergency')||l.includes('breath')?'This may be urgent. Contact or visit an emergency veterinary clinic immediately.':l.includes('book')?'To book, use the Book appointment page, select your pet and submit the details.':'I can provide general pet-care information. For diagnosis or treatment, please consult a veterinarian.'));this.chat='';}
+ get pending(){return this.appointments.appointments.filter(a=>a.status==='PENDING').length;}
+}
